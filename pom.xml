@@ -17,7 +17,7 @@
         <cucumber.version>5.4.1</cucumber.version>
         <selenide.version>5.8.0</selenide.version>
         <selenium.version>3.141.59</selenium.version>
-        <checkstyle.version>3.1.1</checkstyle.version>
+        <checkstyle.version>3.1.0</checkstyle.version>
         <failsafe.version>2.22.0</failsafe.version>
         <assertj.version>3.15.0</assertj.version>
         <slf4j.version>1.7.30</slf4j.version>
