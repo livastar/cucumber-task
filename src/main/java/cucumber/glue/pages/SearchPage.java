@@ -13,20 +13,63 @@ import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.Selenide.$$;
 import static com.codeborne.selenide.WebDriverRunner.url;
 
-public class SearchPage {
+public class SearchPage extends BasePage {
 
-    private static final By MAIN_IFRAME = By.cssSelector("body > iframe");
+    private SelenideElement mainIframe = $("body > iframe");
 
-    private static final By BLACK_SEED_HEADER_LOGO = By.cssSelector("header img[src*='Black_Seed']");
-    private static final By SEARCH_FIELD = By.cssSelector("#searchBox");
-    private static final By SEARCH_RESULTS = By.cssSelector(".pac-container > .pac-item");
-    private static final By MATCHED_RESULTS = By.cssSelector(".pac-item-query > .pac-matched");
-    private static final By MATCHED_RESULT_LOCATION_ICON = By.cssSelector(".pac-icon");
+    private SelenideElement blackSeedHeaderLogo = $("header img[src*='Black_Seed']");
+
+    private SelenideElement searchField = $("#searchBox");
+    private SelenideElement searchButton = $(".searchbox-group button");
+    private SelenideElement clearIcon = $("span [class*='close-circle']");
+    private SelenideElement errorMessage = $(".searchbox .searchbox-help");
+    private By matchedResultLocationIcon = By.cssSelector(".pac-icon");
+    private By matchedResults = By.cssSelector(".pac-item-query > .pac-matched");
+    private ElementsCollection searchResults = $$(".pac-container > .pac-item");
+
+    private By restaurantCards = By.cssSelector(".stores > div[class*='store-container']");
+
+    public SelenideElement getMainIframe() {
+        return mainIframe;
+    }
+
+    public SelenideElement getBlackSeedHeaderLogo() {
+        return blackSeedHeaderLogo;
+    }
+
+    public SelenideElement getSearchField() {
+        return searchField;
+    }
+
+    public SelenideElement getClearIcon() {
+        return clearIcon;
+    }
+
+    public SelenideElement getErrorMessage() {
+        return errorMessage;
+    }
+
+    public By getMatchedResultLocationIcon() {
+        return matchedResultLocationIcon;
+    }
+
+    public By getMatchedResults() {
+        return matchedResults;
+    }
+
+    public ElementsCollection getSearchResults() {
+        return searchResults;
+    }
+
+    public RestaurantSearchCard getRestaurantsCollections() {
+        // ElementsCollection restaurantSearchCards = new RestaurantSearchCardCollection(restaurantCards).collect();
+        return new RestaurantSearchCard(restaurantCards);
+    }
 
     public SearchPage open() {
         Selenide.open("/locations/blackseedbagels");
-        Selenide.switchTo().frame($(MAIN_IFRAME));
-        $(BLACK_SEED_HEADER_LOGO).shouldBe(Condition.visible);
+        Selenide.switchTo().frame($(mainIframe));
+        $(blackSeedHeaderLogo).shouldBe(Condition.visible);
         return new SearchPage();
     }
 
@@ -35,25 +78,29 @@ public class SearchPage {
     }
 
     public SelenideElement enterValueInASearchField(String text) {
-        return $(SEARCH_FIELD).setValue(text);
-    }
-
-    public ElementsCollection searchResults() {
-        return $$(SEARCH_RESULTS);
+        return $(searchField).setValue(text);
     }
 
     public void shouldSeeMatchedSearchResults() {
-        collectionChildrenShouldMatchCondition(searchResults(), MATCHED_RESULTS, sizeGreaterThanOrEqual(1));
+        collectionChildrenShouldMatchCondition(getSearchResults(), matchedResults, sizeGreaterThanOrEqual(1));
     }
 
     public void shouldSeeSearchResultsLocationIcons() {
-        collectionChildrenShouldMatchCondition(searchResults(), MATCHED_RESULT_LOCATION_ICON, size(1));
+        collectionChildrenShouldMatchCondition(getSearchResults(), matchedResultLocationIcon, size(1));
     }
 
     private void collectionChildrenShouldMatchCondition(
             ElementsCollection collection,
             By childSelector,
             CollectionCondition condition) {
-        collection.stream().forEach(e -> e.findAll(childSelector).shouldHave(condition));
+        collection.filter(Condition.visible).forEach(e -> e.findAll(childSelector).shouldHave(condition));
+    }
+
+    public void shouldSeeMatchedRestaurantCard(String text) {
+        ElementsCollection restaurantsCollection = $$(".stores > div[class*='store-container']");
+    }
+
+    public SelenideElement getSearchButton() {
+        return searchButton;
     }
 }
