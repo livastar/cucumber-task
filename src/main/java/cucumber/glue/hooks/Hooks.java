@@ -12,12 +12,12 @@ public class Hooks {
     }
 
     @Before
-    public void BeforeScenario() {
+    public void beforeScenario() {
         selenideConfiguration.getBrowser();
     }
 
     @After
-    public void AfterScenario() {
+    public void afterScenario() {
         selenideConfiguration.closeSession();
     }
 }

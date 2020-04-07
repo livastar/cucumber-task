@@ -1,4 +1,4 @@
-package cucumber.glue;
+package runner;
 
 import io.cucumber.junit.Cucumber;
 import io.cucumber.junit.CucumberOptions;
@@ -16,8 +16,5 @@ import org.junit.runner.RunWith;
                 "timeline:target/timelineReport"
         },
         glue = { "cucumber.glue.hooks", "cucumber.glue.steps", "cucumber.glue.pages" },
-        strict = true,
-        monochrome = true
-)
-public class CucumberRunner {
-}
+        strict = true)
+public class CucumberRunner { }

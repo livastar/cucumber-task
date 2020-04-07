@@ -7,7 +7,7 @@ import static java.lang.Boolean.parseBoolean;
 
 public class SelenideConfiguration {
 
-    private final String REPORTS_FOLDER = "target";
+    private static final String REPORTS_FOLDER = "target";
 
     public void getBrowser() {
         String browser = System.getProperty("selenide.browser", "chrome");
