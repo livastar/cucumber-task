@@ -1,9 +1,7 @@
 package cucumber.glue.steps;
 
 import com.codeborne.selenide.Condition;
-import cucumber.glue.pages.RestaurantPage;
 import cucumber.glue.pages.SearchPage;
-import io.cucumber.java.StepDefinitionAnnotation;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
@@ -54,13 +52,13 @@ public class SearchStepDefinitions {
 
     @Then("restaurant card is presented the first in the list")
     public void restaurantCardIsPresentedTheFirstInTheList() {
-        // searchPage.shouldSeeMatchedRestaurantCard("");
+        searchPage.getRestaurantCardCollection().shouldHave(sizeGreaterThanOrEqual(1));
     }
 
     @And("user selects the card with address {string}")
     public void userSelectsTheCardWithAddress(String address) {
-        // SelenideElement restaurantCard = searchPage.getRestaurantsCollections().findBy(Condition.text(address));
-        // restaurantCard.
+        searchPage.getRestaurantCardCollection()
+                .getRestaurantCard().getCardAddress().shouldHave(Condition.textCaseSensitive(address)).click();
     }
 
     @And("user clicks on search button")

@@ -5,18 +5,24 @@ import com.codeborne.selenide.Condition;
 import com.codeborne.selenide.ElementsCollection;
 import com.codeborne.selenide.Selenide;
 import com.codeborne.selenide.SelenideElement;
+import cucumber.glue.pages.components.RestaurantCardCollection;
+import lombok.Getter;
 import org.openqa.selenium.By;
 
 import static com.codeborne.selenide.CollectionCondition.size;
 import static com.codeborne.selenide.CollectionCondition.sizeGreaterThanOrEqual;
 import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.Selenide.$$;
+import static com.codeborne.selenide.WebDriverRunner.driver;
 import static com.codeborne.selenide.WebDriverRunner.url;
 
+@Getter
 public class SearchPage extends BasePage {
 
-    private SelenideElement mainIframe = $("body > iframe");
+    private RestaurantCardCollection restaurantCardCollection =
+            new RestaurantCardCollection(driver(), ".stores .store-container");
 
+    private SelenideElement mainIframe = $("body > iframe");
     private SelenideElement blackSeedHeaderLogo = $("header img[src*='Black_Seed']");
 
     private SelenideElement searchField = $("#searchBox");
@@ -26,45 +32,6 @@ public class SearchPage extends BasePage {
     private By matchedResultLocationIcon = By.cssSelector(".pac-icon");
     private By matchedResults = By.cssSelector(".pac-item-query > .pac-matched");
     private ElementsCollection searchResults = $$(".pac-container > .pac-item");
-
-    private By restaurantCards = By.cssSelector(".stores > div[class*='store-container']");
-
-    public SelenideElement getMainIframe() {
-        return mainIframe;
-    }
-
-    public SelenideElement getBlackSeedHeaderLogo() {
-        return blackSeedHeaderLogo;
-    }
-
-    public SelenideElement getSearchField() {
-        return searchField;
-    }
-
-    public SelenideElement getClearIcon() {
-        return clearIcon;
-    }
-
-    public SelenideElement getErrorMessage() {
-        return errorMessage;
-    }
-
-    public By getMatchedResultLocationIcon() {
-        return matchedResultLocationIcon;
-    }
-
-    public By getMatchedResults() {
-        return matchedResults;
-    }
-
-    public ElementsCollection getSearchResults() {
-        return searchResults;
-    }
-
-    public RestaurantSearchCard getRestaurantsCollections() {
-        // ElementsCollection restaurantSearchCards = new RestaurantSearchCardCollection(restaurantCards).collect();
-        return new RestaurantSearchCard(restaurantCards);
-    }
 
     public SearchPage open() {
         Selenide.open("/locations/blackseedbagels");
