@@ -1,6 +1,8 @@
 package cucumber.glue.steps;
 
+import com.codeborne.selenide.Condition;
 import cucumber.glue.pages.SearchPage;
+import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
@@ -16,20 +18,51 @@ public class SearchStepDefinitions {
     }
 
     @Given("an open browser page for blackseedbagels restaurant")
-    public void an_open_browser_page_for_blackseedbagels_restaurant() {
+    public void anOpenBrowserPageForBlackseedbagelsRestaurant() {
         searchPage.open();
     }
 
-    @When("a valid address {string} is entered in search field")
-    public void a_valid_address_is_entered_in_search_field(String address) {
+    @When("an address {string} is entered in search field")
+    public void anAddressIsEnteredInSearchField(String address) {
         searchPage.enterValueInASearchField(address);
     }
 
     @Then("at least one matched result should be shown bold")
-    public void at_least_one_matched_result_should_be_shown_bold() {
-        searchPage.searchResults().shouldHave(sizeGreaterThanOrEqual(1));
+    public void atLeastOneMatchedResultShouldBeShownBold() {
+        searchPage.getSearchResults().shouldHave(sizeGreaterThanOrEqual(1));
         searchPage.shouldSeeMatchedSearchResults();
         searchPage.shouldSeeSearchResultsLocationIcons();
     }
 
+    @Then("user is presented with an error: {string}")
+    public void userIsPresentedWithAnError(String error) {
+        searchPage.getErrorMessage().shouldHave(Condition.text(error));
+    }
+
+    @Then("there is no search results shown")
+    public void thereIsNoSearchResultsShown() {
+        searchPage.getSearchResults().shouldHaveSize(0);
+    }
+
+    @And("from the list user selects search result with address {string}")
+    public void fromTheListUserSelectsSearchResultWithAddress(String address) {
+        searchPage.getSearchField().hover();
+        searchPage.getSearchResults().find(Condition.text(address.split(",")[0])).click();
+    }
+
+    @Then("restaurant card is presented the first in the list")
+    public void restaurantCardIsPresentedTheFirstInTheList() {
+        searchPage.getRestaurantCardCollection().shouldHave(sizeGreaterThanOrEqual(1));
+    }
+
+    @And("user selects the card with address {string}")
+    public void userSelectsTheCardWithAddress(String address) {
+        searchPage.getRestaurantCardCollection()
+                .getRestaurantCard().getCardAddress().shouldHave(Condition.textCaseSensitive(address)).click();
+    }
+
+    @And("user clicks on search button")
+    public void userClicksOnSearchButton() {
+        searchPage.getSearchButton().click();
+    }
 }
